@@ -113,10 +113,10 @@ clinical_tracking_system/
 - [x] Verify: hash determinism, re-auth window, escalation tests (35 total)
 
 ### Sprint 5 — EDC Form Builder + Validation
-- edc_forms migrations; schema JSONB: field types (text/number/date/dropdown/checkbox), rules (required/range/regex)
-- Shared `lib/edc` types + validation engine (used by client mirror + server enforcement)
-- **UI:** builder (add/remove/reorder fields, property editor, preview) — 21st sketch if no catalog match; form list + versioning
-- **Verify:** schema saved → preview renders → invalid data rejected server-side
+- [x] edc_forms migrations; schema JSONB: field types (text/number/date/dropdown/checkbox), rules (required/range/regex)
+- [x] Shared `lib/edc` types + validation engine (used by client mirror + server enforcement)
+- [x] UI: builder (add/remove/reorder fields, property editor, preview) + form list + versioning
+- [x] Verify: validation-engine tests (42 total)
 
 ### Sprint 6 — Data Entry + Export
 - edc_entries migrations; entry workflow DRAFT→QUERY→CLEANED→LOCKED; query logging
