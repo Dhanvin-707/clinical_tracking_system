@@ -107,7 +107,7 @@ revoke insert, update, delete on public.audit_log from anon;
 -- Chain integrity check: recompute every hash and report tampering.
 create function public.audit_chain_verify()
 returns table (id bigint, valid boolean, stored_hash text, computed_hash text)
-language sql security definer set search_path = public
+language sql security definer set search_path = public, extensions
 as $$
   with chain as (
     select
@@ -163,7 +163,7 @@ create function public.audit_log_insert(
   p_after jsonb default null
 )
 returns void
-language plpgsql security definer set search_path = public
+language plpgsql security definer set search_path = public, extensions
 as $$
 declare
   v_prev_hash text;
