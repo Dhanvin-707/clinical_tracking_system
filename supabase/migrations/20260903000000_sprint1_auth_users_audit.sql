@@ -33,28 +33,28 @@ create policy "profiles_read_own"
   on public.profiles for select
   using (auth.uid() = id);
 
+-- SECURITY DEFINER helper so admin policies below don't recurse.
+create function public.current_profile_role()
+returns public.user_role
+language sql stable security definer set search_path = public
+as $$
+  select role from public.profiles where id = auth.uid() and is_active;
+$$;
+
 -- Administrators can read all profiles (for the user-management screen).
+-- Uses current_profile_role() (SECURITY DEFINER) to avoid recursive RLS.
 create policy "profiles_read_admin"
   on public.profiles for select
-  using (exists (
-    select 1 from public.profiles p
-    where p.id = auth.uid() and p.role = 'Administrator' and p.is_active
-  ));
+  using ((select public.current_profile_role()) = 'Administrator');
 
 -- Administrators can create, update, and disable profiles.
 create policy "profiles_insert_admin"
   on public.profiles for insert
-  with check (exists (
-    select 1 from public.profiles p
-    where p.id = auth.uid() and p.role = 'Administrator' and p.is_active
-  ));
+  with check ((select public.current_profile_role()) = 'Administrator');
 
 create policy "profiles_update_admin"
   on public.profiles for update
-  using (exists (
-    select 1 from public.profiles p
-    where p.id = auth.uid() and p.role = 'Administrator' and p.is_active
-  ));
+  using ((select public.current_profile_role()) = 'Administrator');
 
 -- New user profiles are created by the handle_new_user trigger (self-insert).
 create function public.handle_new_user()
@@ -166,14 +166,16 @@ returns void
 language plpgsql security definer set search_path = public, extensions
 as $$
 declare
-  v_prev_hash text;
+  v_prev_hash text := '';
   v_hash text;
 begin
-  select coalesce(hash, '') into v_prev_hash
+  select hash into v_prev_hash
   from public.audit_log
   order by id desc
   limit 1
   for update;
+
+  v_prev_hash := coalesce(v_prev_hash, '');
 
   v_hash := encode(digest(
     v_prev_hash || '|' ||

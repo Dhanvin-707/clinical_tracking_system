@@ -54,44 +54,46 @@ export default async function VerifyOtpPage({
             Enter the one-time code sent to {email}.
           </CardDescription>
         </CardHeader>
-        <form action={verifyOtpAction}>
-          <CardContent className="space-y-4">
-            {error === "invalid" && (
-              <p className="text-sm text-destructive">
-                Invalid code. Please try again.
-              </p>
-            )}
-            {error === "missing" && (
-              <p className="text-sm text-destructive">
-                Please enter your verification code.
-              </p>
-            )}
-            <input type="hidden" name="email" value={email} />
-            <div className="space-y-2">
-              <Label htmlFor="token">Verification code</Label>
-              <Input
-                id="token"
-                name="token"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                placeholder="6-digit code"
-                maxLength={6}
-                required
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="flex-col gap-3">
-            <Button type="submit" className="w-full">
-              Verify &amp; continue
-            </Button>
-            <form action={resendOtpAction} className="contents">
+        <div className="flex flex-col">
+            <form action={verifyOtpAction}>
+              <CardContent className="space-y-4">
+                {error === "invalid" && (
+                  <p className="text-sm text-destructive">
+                    Invalid code. Please try again.
+                  </p>
+                )}
+                {error === "missing" && (
+                  <p className="text-sm text-destructive">
+                    Please enter your verification code.
+                  </p>
+                )}
+                <input type="hidden" name="email" value={email} />
+                <div className="space-y-2">
+                  <Label htmlFor="token">Verification code</Label>
+                  <Input
+                    id="token"
+                    name="token"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    placeholder="6-digit code"
+                    maxLength={6}
+                    required
+                  />
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" className="w-full">
+                  Verify &amp; continue
+                </Button>
+              </CardFooter>
+            </form>
+            <form action={resendOtpAction} className="px-6 pb-6">
               <input type="hidden" name="email" value={email} />
               <Button type="submit" variant="ghost" className="w-full">
                 Resend code
               </Button>
             </form>
-          </CardFooter>
-        </form>
+          </div>
       </Card>
     </main>
   );

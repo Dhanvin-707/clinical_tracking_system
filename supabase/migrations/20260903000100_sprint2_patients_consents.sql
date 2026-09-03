@@ -59,7 +59,7 @@ create policy "consents_read_all"
   using (auth.role() = 'authenticated');
 
 -- Researchers and DataManagers (and Admins) create/update patients.
-create function public.current_profile_role()
+create or replace function public.current_profile_role()
 returns public.user_role
 language sql stable security definer set search_path = public
 as $$
