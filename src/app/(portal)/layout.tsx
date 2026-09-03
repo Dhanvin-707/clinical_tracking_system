@@ -36,7 +36,7 @@ export default async function PortalLayout({
   return (
     <div className="flex min-h-full flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
-        <div className="flex h-14 items-center gap-4 px-4 sm:px-6">
+        <div className="flex h-14 items-center gap-4 overflow-x-auto px-4 sm:px-6">
           <Sheet>
             <SheetTrigger
               render={
