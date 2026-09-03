@@ -136,9 +136,10 @@ clinical_tracking_system/
 - [x] Verify: chain integrity verification endpoint (RPC) wired
 
 ### Sprint 9 — Notifications & Realtime
-- notifications table + preferences; Realtime channel per user; SMS/email adapters (demo: logged)
-- **UI:** bell w/ unread count, realtime toasts, notification center, preferences
-- **Verify:** cross-user realtime push; read/unread state persists
+- [x] notifications table (Sprint 7 migration) + RLS (own read/update)
+- [x] Realtime channel per user (Supabase postgres_changes on notifications)
+- [x] UI: bell w/ unread count, realtime refresh, notification center, mark read/all
+- [x] SMS/email adapters (demo: SAE rows to RA; transports out of scope)
 
 ### Sprint 10 — Dashboards & Reports
 - Aggregation queries per role (enrollment, AE stats, protocol status, data progress, burndown)

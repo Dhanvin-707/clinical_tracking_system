@@ -13,6 +13,7 @@ import {
 import { logoutAction } from "@/lib/auth/actions";
 import { NAV } from "@/lib/auth/nav";
 import { requireUser, ROLE_LABELS } from "@/lib/auth/rbac";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 
 function initials(name: string) {
   return name
@@ -73,6 +74,7 @@ export default async function PortalLayout({
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
+            <NotificationBell />
             <DropdownMenu>
               <DropdownMenuTrigger
                 render={<Button variant="ghost" className="gap-2" />}
