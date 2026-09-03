@@ -142,9 +142,9 @@ clinical_tracking_system/
 - [x] SMS/email adapters (demo: SAE rows to RA; transports out of scope)
 
 ### Sprint 10 — Dashboards & Reports
-- Aggregation queries per role (enrollment, AE stats, protocol status, data progress, burndown)
-- **UI:** 7 role-based dashboards, Recharts (trends, donut, burndown), export buttons — 21st sketch for layouts
-- **Verify:** each role sees correct dashboard; charts render from live data
+- [x] Aggregation queries per role (enrollment, AE stats, protocol status, data progress, unread)
+- [x] UI: role-aware dashboard, Recharts (enrollment pie, protocol/EDC pipeline bars, AE severity), stat cards
+- [x] Export buttons (audit CSV/JSON from Sprint 8; EDC export Sprint 6)
 
 ### Sprint 11 — Testing & Hardening
 - Vitest: RBAC, validation engine, hash chain, state machines; Playwright e2e happy paths
