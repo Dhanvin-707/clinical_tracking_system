@@ -94,11 +94,11 @@ clinical_tracking_system/
 - [x] RBAC tests (Vitest: roles, nav scoping)
 
 ### Sprint 2 — Patients & Consent
-- patients/consents migrations + auto-ID generation (sequence)
-- Registration, enrollment state machine, withdrawal flow
-- Consent upload → Storage → hash; verify endpoint
-- **UI:** registration form, patient detail w/ consent panel, withdrawal confirm
-- **Verify:** register → upload PDF → hash shown → verify passes; tampered file fails
+- [x] patients/consents migrations + auto-ID generation (sequence)
+- [x] Registration, enrollment state machine, withdrawal flow
+- [x] Consent upload → Storage → hash; verify endpoint
+- [x] UI: registration form, patient detail w/ consent panel, withdrawal confirm
+- [x] Verify: state-machine + hash/tamper tests (15 total)
 
 ### Sprint 3 — Protocol CRUD & Workflow
 - protocols/protocol_versions migrations; status transitions + permission checks
