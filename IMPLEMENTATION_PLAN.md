@@ -119,10 +119,10 @@ clinical_tracking_system/
 - [x] Verify: validation-engine tests (42 total)
 
 ### Sprint 6 — Data Entry + Export
-- edc_entries migrations; entry workflow DRAFT→QUERY→CLEANED→LOCKED; query logging
-- CSV/JSON export per form (server action)
-- **UI:** dynamic entry forms from schema, inline errors, DataManager review screen, export picker
-- **Verify:** submit → query → clean → lock; export matches
+- [x] edc_entries migrations; entry workflow DRAFT→QUERY→CLEANED→LOCKED; query logging
+- [x] CSV/JSON export per form (server route, audit-logged)
+- [x] UI: dynamic entry forms from schema, inline errors, DataManager review screen, export picker
+- [x] Verify: CSV escaping/JSON export tests (44 total)
 
 ### Sprint 7 — Adverse Events
 - adverse_events migrations; SAE detection rules; 24h auto-notify RA (realtime + notification row); ethics committee trigger

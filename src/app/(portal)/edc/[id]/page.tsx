@@ -62,7 +62,15 @@ export default async function EdcFormPage({
             {schema.length} fields
           </p>
         </div>
-        <Badge variant="secondary">EDC form</Badge>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm">
+            <a href={`/api/edc/${form.id}/export?format=csv`}>Export CSV</a>
+          </Button>
+          <Button variant="outline" size="sm">
+            <a href={`/api/edc/${form.id}/export?format=json`}>Export JSON</a>
+          </Button>
+          <Badge variant="secondary">EDC form</Badge>
+        </div>
       </div>
 
       {q.submitted && (
