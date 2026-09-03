@@ -101,10 +101,10 @@ clinical_tracking_system/
 - [x] Verify: state-machine + hash/tamper tests (15 total)
 
 ### Sprint 3 — Protocol CRUD & Workflow
-- protocols/protocol_versions migrations; status transitions + permission checks
-- Versioning: ACTIVE versions immutable; edits create new version
-- **UI:** multi-section protocol form, status stepper (valid transitions only), version history diff viewer
-- **Verify:** DRAFT→UNDER_REVIEW→APPROVED→ACTIVE→CLOSED; ACTIVE edit blocked
+- [x] protocols/protocol_versions migrations; status transitions + permission checks
+- [x] Versioning: ACTIVE versions immutable; edits create new version
+- [x] UI: multi-section protocol form, status stepper (valid transitions only), version history viewer
+- [x] Verify: workflow transition matrix tests (30 total)
 
 ### Sprint 4 — E-Signatures & Deviations
 - signatures + deviations migrations; re-auth window (5 min); SHA-256 signature
