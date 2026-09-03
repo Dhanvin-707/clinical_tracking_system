@@ -56,7 +56,12 @@ export async function signupAction(formData: FormData) {
     password,
     options: { data: { full_name: fullName } },
   });
-  if (error) redirect("/signup?error=taken");
+  if (error) {
+    const taken =
+      error.code === "user_already_exists" ||
+      /already registered/i.test(error.message);
+    redirect(taken ? "/signup?error=taken" : "/signup?error=other");
+  }
 
   await writeAudit("SIGNUP", "auth", `user:${email}`);
   redirect("/login?created=1");

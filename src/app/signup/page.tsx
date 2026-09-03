@@ -35,9 +35,17 @@ export default async function SignupPage({
                 Please fill in all fields.
               </p>
             )}
+            {error === "other" && (
+              <p className="text-sm text-destructive">
+                Something went wrong creating your account. Please try again.
+              </p>
+            )}
             {error === "taken" && (
               <p className="text-sm text-destructive">
-                That email is already registered.
+                That email is already registered.{" "}
+                <Link href="/login" className="font-medium underline underline-offset-4">
+                  Sign in instead
+                </Link>
               </p>
             )}
             <div className="space-y-2">
