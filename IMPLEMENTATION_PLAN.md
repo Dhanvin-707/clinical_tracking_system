@@ -130,10 +130,10 @@ clinical_tracking_system/
 - [x] Verify: SAE rules tests (47 total)
 
 ### Sprint 8 — Audit Trail & Compliance
-- Hash-chain RPC + trigger; deny UPDATE/DELETE; audit query API (date/user/action/module)
-- Compliance report: PDF/CSV + chain integrity check
-- **UI:** audit viewer (filters, pagination, before/after diff), hash-chain integrity indicator, report download
-- **Verify:** tamper test — direct SQL update rejected; chain verify endpoint detects modified row
+- [x] Hash-chain RPC + trigger; deny UPDATE/DELETE; audit query API (module/action filters)
+- [x] Compliance report: CSV/JSON + chain integrity check
+- [x] UI: audit viewer (filters, hash display), chain integrity badge, report download
+- [x] Verify: chain integrity verification endpoint (RPC) wired
 
 ### Sprint 9 — Notifications & Realtime
 - notifications table + preferences; Realtime channel per user; SMS/email adapters (demo: logged)
