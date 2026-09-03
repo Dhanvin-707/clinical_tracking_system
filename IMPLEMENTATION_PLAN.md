@@ -83,15 +83,15 @@ clinical_tracking_system/
 - [x] `create-next-app` in repo root, Tailwind, ESLint (shadcn init deferred to Sprint 1 UI work)
 - [ ] Supabase project created by user (cloud, ap-southeast-2); `supabase init` + migration workflow setup
 - [x] `lib/supabase/*` server/client/middleware helpers; `.env.local` wired (anon key only)
-- [ ] `requireRole()` RBAC helper (Sprint 1)
+- [x] `requireRole()` RBAC helper (Sprint 1)
 - [x] GitHub Actions CI (lint + typecheck + test) — full deploy pipeline deferred to Sprint 12
 
 ### Sprint 1 — Auth & Users
-- Migrations: profiles, role enum, audit_log core
-- Login/OTP/reset pages (`(auth)` route group); OTP delivered via console in demo
-- Admin user CRUD (server actions + RLS); role-based nav
-- **UI:** login card, OTP input, users table (21st search → shadcn table/dialog/select)
-- **Verify:** fresh visitor → login → OTP → role-scoped nav; RBAC tests
+- [x] Migrations: profiles, role enum, audit_log core (also: hash-chain RPC, RLS policies, new-user trigger, promote_user helper)
+- [x] Login/OTP/reset pages (`(auth)` route group); OTP delivered via console in demo
+- [x] Admin user CRUD (server actions + RLS); role-based nav
+- [x] UI: login card, OTP input, users table (shadcn Base UI)
+- [x] RBAC tests (Vitest: roles, nav scoping)
 
 ### Sprint 2 — Patients & Consent
 - patients/consents migrations + auto-ID generation (sequence)
