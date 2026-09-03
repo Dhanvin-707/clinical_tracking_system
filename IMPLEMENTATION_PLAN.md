@@ -107,10 +107,10 @@ clinical_tracking_system/
 - [x] Verify: workflow transition matrix tests (30 total)
 
 ### Sprint 4 — E-Signatures & Deviations
-- signatures + deviations migrations; re-auth window (5 min); SHA-256 signature
-- PI approve/reject; deviation logging + severity-based escalation to RA
-- **UI:** approval modal w/ re-auth password, e-sign confirm, deviation form + list, escalation badges
-- **Verify:** reject → back to DRAFT; approve w/o re-auth fails; critical deviation notifies RA
+- [x] signatures + deviations migrations; re-auth window (5 min); SHA-256 signature
+- [x] PI approve/reject; deviation logging + severity-based escalation to RA
+- [x] UI: approval modal w/ re-auth password, e-sign confirm, deviation form + list, escalation badges
+- [x] Verify: hash determinism, re-auth window, escalation tests (35 total)
 
 ### Sprint 5 — EDC Form Builder + Validation
 - edc_forms migrations; schema JSONB: field types (text/number/date/dropdown/checkbox), rules (required/range/regex)

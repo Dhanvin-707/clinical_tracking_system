@@ -7,8 +7,24 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { requireUser } from "@/lib/auth/rbac";
 import {
@@ -21,6 +37,11 @@ import {
   changeStatusAction,
   editProtocolAction,
 } from "@/lib/protocols/actions";
+import {
+  logDeviationAction,
+  signProtocolAction,
+} from "@/lib/protocols/signActions";
+import { DEVIATION_LABELS } from "@/lib/protocols/signatures";
 import { createSupabaseServer } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
@@ -42,7 +63,14 @@ export default async function ProtocolDetailPage({
   searchParams,
 }: {
   params: Promise<{ id: string }>;
-  searchParams: Promise<{ error?: string; msg?: string; edited?: string; transitioned?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    msg?: string;
+    edited?: string;
+    transitioned?: string;
+    signed?: string;
+    deviation?: string;
+  }>;
 }) {
   const profile = await requireUser();
   const { id } = await params;
@@ -62,8 +90,23 @@ export default async function ProtocolDetailPage({
     .eq("protocol_id", id)
     .order("version", { ascending: false });
 
+  const { data: signatures } = await supabase
+    .from("signatures")
+    .select("*, profiles!signatures_user_id_fkey(full_name)")
+    .eq("protocol_id", id)
+    .order("created_at", { ascending: false });
+
+  const { data: deviations } = await supabase
+    .from("deviations")
+    .select("*")
+    .eq("protocol_id", id)
+    .order("created_at", { ascending: false });
+
   const currentStatus = protocol.status as ProtocolStatus;
   const canEdit = ["PrincipalInvestigator", "Administrator"].includes(profile.role);
+  const canSign =
+    currentStatus === "UNDER_REVIEW" &&
+    ["PrincipalInvestigator", "Administrator"].includes(profile.role);
   const status = protocol.status as ProtocolStatus;
   const availableTransitions = PROTOCOL_STATUSES.filter((to) =>
     canTransitionStatus(status, to, profile.role)
@@ -96,13 +139,34 @@ export default async function ProtocolDetailPage({
           Status updated.
         </p>
       )}
+      {q.signed && (
+        <p className="text-sm text-emerald-600 dark:text-emerald-400">
+          Protocol signed. The signature is hashed and recorded in the audit
+          chain.
+        </p>
+      )}
+      {q.deviation && (
+        <p className="text-sm text-emerald-600 dark:text-emerald-400">
+          Deviation logged.
+        </p>
+      )}
       {q.error && (
         <p className="text-sm text-destructive">
           {q.error === "transition"
             ? `That transition is not allowed for your role. ${q.msg ?? ""}`
             : q.error === "edit"
               ? `Edit failed. ${q.msg ?? ""}`
-              : `${q.error}: ${q.msg ?? ""}`}
+              : q.error === "sign"
+                ? `Signature failed. ${q.msg ?? ""}`
+                : q.error === "signauth"
+                  ? "Re-authentication failed. Check your password and try again."
+                  : q.error === "signmissing"
+                    ? "Approval requires your password to re-authenticate."
+                    : q.error === "dev"
+                      ? `Deviation failed. ${q.msg ?? ""}`
+                      : q.error === "devmissing"
+                        ? "Deviation requires a description and severity."
+                        : `${q.error}: ${q.msg ?? ""}`}
         </p>
       )}
 
@@ -148,7 +212,54 @@ export default async function ProtocolDetailPage({
               <CardDescription>Your next allowed actions</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              {availableTransitions.length === 0 ? (
+              {canSign && (
+                <Dialog>
+                  <DialogTrigger render={<Button className="w-full justify-start" />}>
+                    Sign approval (e-signature)
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Sign protocol</DialogTitle>
+                      <DialogDescription>
+                        Re-enter your password to re-authenticate. Your
+                        signature is hashed and stored in the audit chain.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form action={signProtocolAction} className="space-y-4">
+                      <input type="hidden" name="protocol_id" value={protocol.id} />
+                      <div className="space-y-2">
+                        <Label htmlFor="action">Decision</Label>
+                        <Select name="action" defaultValue="APPROVE">
+                          <SelectTrigger id="action" className="w-full">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="APPROVE">Approve</SelectItem>
+                            <SelectItem value="REJECT">Reject (back to draft)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="reason">Reason</Label>
+                        <Textarea id="reason" name="reason" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="password">Your password</Label>
+                        <Input
+                          id="password"
+                          name="password"
+                          type="password"
+                          required
+                        />
+                      </div>
+                      <DialogFooter>
+                        <Button type="submit">Sign</Button>
+                      </DialogFooter>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              )}
+              {availableTransitions.length === 0 && !canSign ? (
                 <p className="text-sm text-muted-foreground">
                   No transitions available for your role.
                 </p>
@@ -221,6 +332,109 @@ export default async function ProtocolDetailPage({
             </Card>
           )}
         </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Deviations</CardTitle>
+            <CardDescription>
+              Log protocol deviations. CRITICAL ones auto-escalate to
+              Regulatory Affairs.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <form action={logDeviationAction} className="space-y-3">
+              <input type="hidden" name="protocol_id" value={protocol.id} />
+              <div className="space-y-2">
+                <Label htmlFor="severity">Severity</Label>
+                <Select name="severity" defaultValue="MINOR">
+                  <SelectTrigger id="severity" className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="MINOR">{DEVIATION_LABELS.MINOR}</SelectItem>
+                    <SelectItem value="MAJOR">{DEVIATION_LABELS.MAJOR}</SelectItem>
+                    <SelectItem value="CRITICAL">
+                      {DEVIATION_LABELS.CRITICAL} — escalates to RA
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description</Label>
+                <Textarea id="description" name="description" required />
+              </div>
+              <Button type="submit" variant="outline">
+                Log deviation
+              </Button>
+            </form>
+
+            {(deviations ?? []).length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                No deviations logged.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {(deviations ?? []).map((d) => (
+                  <div key={d.id} className="rounded-lg border p-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <Badge
+                        variant={d.severity === "CRITICAL" ? "destructive" : "secondary"}
+                      >
+                        {DEVIATION_LABELS[d.severity as keyof typeof DEVIATION_LABELS]}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(d.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <p className="mt-1 whitespace-pre-wrap">{d.description}</p>
+                    {d.escalated_at && (
+                      <p className="mt-1 text-xs text-destructive">
+                        Escalated to Regulatory Affairs at{" "}
+                        {new Date(d.escalated_at).toLocaleString()}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Signatures</CardTitle>
+            <CardDescription>
+              Hash-verified e-signatures with re-authentication.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {(signatures ?? []).length === 0 ? (
+              <p className="text-sm text-muted-foreground">
+                No signatures recorded yet.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {(signatures ?? []).map((s) => (
+                  <div key={s.id} className="rounded-lg border p-3 text-sm">
+                    <div className="flex items-center justify-between">
+                      <Badge variant={s.action === "APPROVE" ? "default" : "destructive"}>
+                        {s.action === "APPROVE" ? "Approved" : "Rejected"}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(s.created_at).toLocaleString()}
+                      </span>
+                    </div>
+                    <p className="mt-1 break-all font-mono text-xs text-muted-foreground">
+                      {s.sha256_hash}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
       </div>
 
       <Card>
