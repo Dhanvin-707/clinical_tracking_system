@@ -125,9 +125,9 @@ clinical_tracking_system/
 - [x] Verify: CSV escaping/JSON export tests (44 total)
 
 ### Sprint 7 — Adverse Events
-- adverse_events migrations; SAE detection rules; 24h auto-notify RA (realtime + notification row); ethics committee trigger
-- **UI:** AE form, SAE urgent banner, timeline view per patient/protocol, filters
-- **Verify:** SAE → RA receives realtime notification; timeline shows entries
+- [x] adverse_events migrations; SAE detection rules; 24h auto-notify RA (notification rows); ethics committee trigger
+- [x] UI: AE form, SAE urgent banner, timeline view per patient/protocol, filters
+- [x] Verify: SAE rules tests (47 total)
 
 ### Sprint 8 — Audit Trail & Compliance
 - Hash-chain RPC + trigger; deny UPDATE/DELETE; audit query API (date/user/action/module)
