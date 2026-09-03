@@ -153,10 +153,10 @@ clinical_tracking_system/
 - [x] Empty/error/loading states across all screens (audited; loading.tsx + not-found.tsx added)
 
 ### Sprint 12 — Deployment & Docs
-- Vercel deploy + Supabase prod project; env management
-- GitHub Actions: CI on PR, deploy on main
-- Swagger/OpenAPI docs, ER diagram, compliance-notes doc, demo script + walkthrough
-- Final acceptance run: full 12-sprint checklist
+- [x] Vercel deploy config documented (env vars, auto-redeploy on main)
+- [x] GitHub Actions CI on PR/main (lint + typecheck + test + build)
+- [x] Docs: README (setup, roles, modules), COMPLIANCE.md (gaps), DEMO_SCRIPT.md
+- [ ] Final acceptance run on a live Vercel + Supabase deployment (needs user's env)
 
 ## 6. Skills & Tools Usage
 
