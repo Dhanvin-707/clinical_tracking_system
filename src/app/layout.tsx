@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { CursorFX } from "@/components/fx/CursorFX";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Clinical Tracking System",
-  description: "Clinical trials management platform (demo)",
+  description:
+    "A full-stack clinical trials management platform with immutable SHA-256 audit chaining, e-signatures and role-based access (demo).",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -27,6 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         {children}
         <Toaster />
+        <CursorFX />
       </body>
     </html>
   );

@@ -40,7 +40,10 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/signup") ||
     pathname.startsWith("/verify-otp");
 
-  if (!user && !isAuthRoute) {
+  // Public landing page.
+  const isPublic = pathname === "/";
+
+  if (!user && !isAuthRoute && !isPublic) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);

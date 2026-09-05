@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signupAction } from "@/lib/auth/actions";
+import { AuthShell } from "@/components/auth/AuthShell";
 
 export default async function SignupPage({
   searchParams,
@@ -20,11 +21,11 @@ export default async function SignupPage({
   const { error } = await searchParams;
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
-      <Card className="w-full max-w-sm">
+    <AuthShell>
+      <Card className="glass w-full max-w-sm border-white/10 bg-white/[0.04] ring-white/10 backdrop-blur-xl">
         <CardHeader>
-          <CardTitle className="text-xl">Request access</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl text-white">Request access</CardTitle>
+          <CardDescription className="text-zinc-400">
             Create an account. An administrator assigns your role.
           </CardDescription>
         </CardHeader>
@@ -82,14 +83,14 @@ export default async function SignupPage({
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-3">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-white text-black hover:bg-white/85">
               Create account
             </Button>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-zinc-400">
               Already have an account?{" "}
               <Link
                 href="/login"
-                className="font-medium text-foreground underline underline-offset-4"
+                className="font-medium text-white underline underline-offset-4"
               >
                 Sign in
               </Link>
@@ -97,6 +98,6 @@ export default async function SignupPage({
           </CardFooter>
         </form>
       </Card>
-    </main>
+    </AuthShell>
   );
 }

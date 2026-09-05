@@ -14,6 +14,7 @@ import { logoutAction } from "@/lib/auth/actions";
 import { NAV } from "@/lib/auth/nav";
 import { requireUser, ROLE_LABELS } from "@/lib/auth/rbac";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
+import { FilmStripNav } from "@/components/dashboard/FilmStripNav";
 
 function initials(name: string) {
   return name
@@ -34,8 +35,8 @@ export default async function PortalLayout({
   const nav = NAV[profile.role];
 
   return (
-    <div className="flex min-h-full flex-col">
-      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
+    <div className="dark flex min-h-full flex-col bg-[#0a0a0f] text-zinc-100">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#0a0a0f]/70 backdrop-blur-md">
         <div className="flex h-14 items-center gap-4 overflow-x-auto px-4 sm:px-6">
           <Sheet>
             <SheetTrigger
@@ -66,13 +67,6 @@ export default async function PortalLayout({
           <Link href="/dashboard" className="font-semibold">
             Clinical Tracking
           </Link>
-          <nav className="ml-6 hidden items-center gap-1 lg:flex" aria-label="Main navigation">
-            {nav.map((item) => (
-              <Button key={item.href} variant="ghost" size="sm">
-                <a href={item.href}>{item.label}</a>
-              </Button>
-            ))}
-          </nav>
           <div className="ml-auto flex items-center gap-2">
             <NotificationBell />
             <DropdownMenu>
@@ -106,9 +100,13 @@ export default async function PortalLayout({
             </DropdownMenu>
           </div>
         </div>
+        {/* film-strip navigation band */}
+        <div className="hidden border-t border-white/10 lg:block">
+          <FilmStripNav items={nav} />
+        </div>
       </header>
       <main className="flex-1 p-4 sm:p-6">{children}</main>
-      <footer className="border-t px-4 py-3 text-center text-xs text-muted-foreground">
+      <footer className="border-t border-white/10 px-4 py-3 text-center text-xs text-zinc-500">
         Demo system — not for real clinical data or medical decisions.
       </footer>
     </div>

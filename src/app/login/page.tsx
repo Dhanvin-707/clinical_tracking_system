@@ -11,6 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginAction } from "@/lib/auth/actions";
+import { AuthShell } from "@/components/auth/AuthShell";
 
 export default async function LoginPage({
   searchParams,
@@ -20,11 +21,11 @@ export default async function LoginPage({
   const { error, created } = await searchParams;
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
-      <Card className="w-full max-w-sm">
+    <AuthShell>
+      <Card className="glass w-full max-w-sm border-white/10 bg-white/[0.04] ring-white/10 backdrop-blur-xl">
         <CardHeader>
-          <CardTitle className="text-xl">Clinical Tracking System</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl text-white">Clinical Tracking System</CardTitle>
+          <CardDescription className="text-zinc-400">
             Sign in to your trial workspace. Demo data only.
           </CardDescription>
         </CardHeader>
@@ -73,14 +74,14 @@ export default async function LoginPage({
             </div>
           </CardContent>
           <CardFooter className="flex-col gap-3">
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full bg-white text-black hover:bg-white/85">
               Sign in
             </Button>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-zinc-400">
               No account?{" "}
               <Link
                 href="/signup"
-                className="font-medium text-foreground underline underline-offset-4"
+                className="font-medium text-white underline underline-offset-4"
               >
                 Request access
               </Link>
@@ -88,6 +89,6 @@ export default async function LoginPage({
           </CardFooter>
         </form>
       </Card>
-    </main>
+    </AuthShell>
   );
 }

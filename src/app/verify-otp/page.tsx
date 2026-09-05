@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { resendOtpAction, verifyOtpAction } from "@/lib/auth/actions";
 import { createSupabaseServer } from "@/lib/supabase/server";
+import { AuthShell } from "@/components/auth/AuthShell";
 
 export default async function VerifyOtpPage({
   searchParams,
@@ -25,32 +26,32 @@ export default async function VerifyOtpPage({
 
   if (!user) {
     return (
-      <main className="flex flex-1 items-center justify-center p-6">
-        <Card className="w-full max-w-sm">
+      <AuthShell>
+        <Card className="glass w-full max-w-sm border-white/10 bg-white/[0.04] ring-white/10 backdrop-blur-xl">
           <CardHeader>
-            <CardTitle>Session expired</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-white">Session expired</CardTitle>
+            <CardDescription className="text-zinc-400">
               Please sign in again to verify your identity.
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button className="w-full">
+            <Button className="w-full bg-white text-black hover:bg-white/85">
               <a href="/login">Back to sign in</a>
             </Button>
           </CardFooter>
         </Card>
-      </main>
+      </AuthShell>
     );
   }
 
   const email = user.email ?? "";
 
   return (
-    <main className="flex flex-1 items-center justify-center p-6">
-      <Card className="w-full max-w-sm">
+    <AuthShell>
+      <Card className="glass w-full max-w-sm border-white/10 bg-white/[0.04] ring-white/10 backdrop-blur-xl">
         <CardHeader>
-          <CardTitle className="text-xl">Two-factor verification</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-xl text-white">Two-factor verification</CardTitle>
+          <CardDescription className="text-zinc-400">
             Enter the one-time code sent to {email}.
           </CardDescription>
         </CardHeader>
@@ -82,19 +83,19 @@ export default async function VerifyOtpPage({
                 </div>
               </CardContent>
               <CardFooter>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full bg-white text-black hover:bg-white/85">
                   Verify &amp; continue
                 </Button>
               </CardFooter>
             </form>
             <form action={resendOtpAction} className="px-6 pb-6">
               <input type="hidden" name="email" value={email} />
-              <Button type="submit" variant="ghost" className="w-full">
+              <Button type="submit" variant="ghost" className="w-full text-zinc-300 hover:bg-white/10 hover:text-white">
                 Resend code
               </Button>
             </form>
           </div>
       </Card>
-    </main>
+    </AuthShell>
   );
 }
